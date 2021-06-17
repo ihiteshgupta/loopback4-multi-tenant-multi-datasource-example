@@ -6,7 +6,7 @@ export class UserRepository extends DefaultCrudRepository<User,
   typeof User.prototype.id,
   UserRelations> {
   constructor(
-    @inject('datasources.multi-tenant-db') dataSource: JugglerDataSource,
+    @inject('datasources.pgdb') dataSource: JugglerDataSource,
   ) {
     super(User, dataSource);
   }

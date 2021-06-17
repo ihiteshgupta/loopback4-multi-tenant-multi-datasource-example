@@ -9,7 +9,13 @@ import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {MySequence} from './sequence';
-import {MultiTenantMiddleware} from "./middlewares/multi-tenant.middleware";
+import {CustomDatasourceProvider} from "./providers/custom-datasource.provider";
+import {CustomDatasourceIdentifierProvider} from "./providers/custom-datasource-identifier.provider";
+import {
+  DynamicDatasourceBindings,
+  DynamicDatasourceMiddlewareProvider,
+  Loopback4DynamicDatasourceComponent
+} from "loopback4-dynamic-datasource";
 
 export {ApplicationConfig};
 
@@ -29,7 +35,10 @@ export class Loopback4MultiTenantMultiDatasourceExampleApplication extends BootM
     this.configure(RestExplorerBindings.COMPONENT).to({
       path: '/explorer',
     });
-    this.middleware(MultiTenantMiddleware);
+    this.component(Loopback4DynamicDatasourceComponent);
+    this.middleware(DynamicDatasourceMiddlewareProvider);
+    this.bind(DynamicDatasourceBindings.DATASOURCE_PROVIDER).toProvider(CustomDatasourceProvider);
+    this.bind(DynamicDatasourceBindings.DATASOURCE_IDENTIFIER_PROVIDER).toProvider(CustomDatasourceIdentifierProvider);
     this.component(RestExplorerComponent);
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here

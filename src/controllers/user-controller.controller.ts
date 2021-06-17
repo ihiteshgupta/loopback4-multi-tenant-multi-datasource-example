@@ -19,11 +19,15 @@ import {
 } from '@loopback/rest';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
+import {inject} from "@loopback/core";
+import {DatasourceIdentifier, DynamicDatasourceBindings} from "loopback4-dynamic-datasource";
 
 export class UserControllerController {
   constructor(
     @repository(UserRepository)
     public userRepository : UserRepository,
+    @inject(DynamicDatasourceBindings.CURRENT_INDETIFIER)
+    private identifier: DatasourceIdentifier
   ) {}
 
   @post('/users')
